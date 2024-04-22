@@ -1,24 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState } from 'react';
 // import React from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import CallIcon from "@mui/icons-material/Call";
-import MailIcon from "@mui/icons-material/Mail";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import { useForm, Controller } from "react-hook-form";
-import { tripDestination } from "../../Constants/Constant";
-import ErrorIcon from "@mui/icons-material/Error";
-import Select from "react-select";
-import { vehicleType } from "../../Constants/Constant";
-import "./DriverRecord.css";
-import { useNavigate } from "react-router-dom";
-import Loading from "../../LoadingOverlay/Loading";
-import { AddContext } from "../../Context/AddContext";
-import LuggageIcon from "@mui/icons-material/Luggage";
-import axios from "axios";
+import PersonIcon from '@mui/icons-material/Person';
+import CallIcon from '@mui/icons-material/Call';
+import MailIcon from '@mui/icons-material/Mail';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import { useForm, Controller } from 'react-hook-form';
+import { tripDestination } from '../../Constants/Constant';
+import Select from 'react-select';
+import { vehicleType } from '../../Constants/Constant';
+import './DriverRecord.css';
+import Loading from '../../LoadingOverlay/Loading';
+import { AddContext } from '../../Context/AddContext';
+import LuggageIcon from '@mui/icons-material/Luggage';
+import axios from 'axios';
 
 const DriverRecordAd = () => {
-  const {  setSubmissionSuccessful, setSubmissionError } = useContext(AddContext);
+  const { setSubmissionSuccessful, setSubmissionError } =
+    useContext(AddContext);
   const {
     register,
     control,
@@ -26,12 +25,11 @@ const DriverRecordAd = () => {
     formState: { errors },
   } = useForm({});
 
-  const navigate = useNavigate();
   // loading effect
-  
+
   // Submit handler for the registration form
   const [loading, setLoading] = useState(false);
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     const dataFormat = {
       lastName: data.lastName,
       firstName: data.firstName,
@@ -47,19 +45,17 @@ const DriverRecordAd = () => {
       type_of_load: data.typeOfLoad,
     };
     try {
-      console.log(data)
+      console.log(data);
       setLoading(true);
       const headers = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       };
-      const API_ENDPOINT =
-        "https://migro.onrender.com/api/ads/add";
+      const API_ENDPOINT = 'https://migro.onrender.com/api/ads/add';
       const result = await axios.post(API_ENDPOINT, dataFormat, headers);
       console.log(result.data);
-      navigate("/driverad", { state: { formData: data } });
       setSubmissionSuccessful(true);
-    }  catch (error) {
-      console.error("Error:", error);
+    } catch (error) {
+      console.error('Error:', error);
       if (error.response && error.response.status === 409) {
         setSubmissionError(true);
       } else {
@@ -73,19 +69,19 @@ const DriverRecordAd = () => {
   const customStyles = {
     option: (defaultStyles, state) => ({
       ...defaultStyles,
-      color: state.isSelected ? "#212529" : "white",
-      backgroundColor: state.isSelected ? "rgb(255,224,138)" : "#212529",
+      color: state.isSelected ? '#212529' : 'white',
+      backgroundColor: state.isSelected ? 'rgb(255,224,138)' : '#212529',
     }),
-    control: (defaultStyles) => ({
+    control: defaultStyles => ({
       ...defaultStyles,
-      backgroundColor: "#fffff",
-      color: "rgb(219,219,219)",
+      backgroundColor: '#fffff',
+      color: 'rgb(219,219,219)',
       // textTransform: "upperCase",
-      padding: "0rem",
-      border: "0rem",
-      boxShadow: "none",
+      padding: '0rem',
+      border: '0rem',
+      boxShadow: 'none',
     }),
-    singleValue: (defaultStyles) => ({ ...defaultStyles, color: " #14161A", }),
+    singleValue: defaultStyles => ({ ...defaultStyles, color: ' #14161A' }),
   };
   return (
     <div>
@@ -93,16 +89,22 @@ const DriverRecordAd = () => {
         {loading && <Loading />}
         <div className="formdivs__record">
           <div className="record__ad">
-            <div className={`record__inputs ${errors.fromProvince ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.fromProvince ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${errors.fromProvince ? 'error' : ''}`}
+            >
+              <div
+                className={`record__divInp ${
+                  errors.fromProvince ? 'error' : ''
+                }`}
+              >
                 <PersonIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="name"
                     placeholder="First Name"
                     name="firstName"
-                    {...register("firstName", {
-                      required: "Please fill out the field",
+                    {...register('firstName', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -115,16 +117,18 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.lastName ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.lastName ? "error" : ""}`}>
+            <div className={`record__inputs ${errors.lastName ? 'error' : ''}`}>
+              <div
+                className={`record__divInp ${errors.lastName ? 'error' : ''}`}
+              >
                 <PersonIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="name"
                     placeholder="last Name"
                     name="lastName"
-                    {...register("lastName", {
-                      required: "Please fill out the field",
+                    {...register('lastName', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -137,16 +141,16 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.email ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.email ? "error" : ""}`}>
+            <div className={`record__inputs ${errors.email ? 'error' : ''}`}>
+              <div className={`record__divInp ${errors.email ? 'error' : ''}`}>
                 <MailIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="email"
                     placeholder="E-mail"
                     name="email"
-                    {...register("email", {
-                      required: "Please fill out the field",
+                    {...register('email', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -159,16 +163,16 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.phone ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.phone ? "error" : ""}`}>
+            <div className={`record__inputs ${errors.phone ? 'error' : ''}`}>
+              <div className={`record__divInp ${errors.phone ? 'error' : ''}`}>
                 <CallIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="tel"
                     placeholder="Phone"
                     name="phone"
-                    {...register("phone", {
-                      required: "Please fill out the field",
+                    {...register('phone', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -180,16 +184,20 @@ const DriverRecordAd = () => {
                 </p>
               )} */}
             </div>
-            <div className={`record__inputs ${errors.typeOfLoad ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.typeOfLoad ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${errors.typeOfLoad ? 'error' : ''}`}
+            >
+              <div
+                className={`record__divInp ${errors.typeOfLoad ? 'error' : ''}`}
+              >
                 <LuggageIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="text"
                     placeholder="Type Of Load"
                     name="typeOfLoad"
-                    {...register("typeOfLoad", {
-                      required: "Please fill out the field",
+                    {...register('typeOfLoad', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -202,8 +210,12 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.typeOfLoad ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.vehicle ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${errors.typeOfLoad ? 'error' : ''}`}
+            >
+              <div
+                className={`record__divInp ${errors.vehicle ? 'error' : ''}`}
+              >
                 <LocalShippingIcon className="iconloc" />
                 <div className="record__input">
                   <div className="ss">
@@ -217,13 +229,13 @@ const DriverRecordAd = () => {
                           placeholder="Type of vehicle"
                           // name="vehicle"
                           isSearchable
-                          noOptionsMessage={() => "no location found"}
+                          noOptionsMessage={() => 'no location found'}
                           styles={customStyles}
                         />
                       )}
                       defaultValue=""
                       rules={{
-                        required: "please select",
+                        required: 'please select',
                       }}
                     />
                   </div>
@@ -239,8 +251,16 @@ const DriverRecordAd = () => {
           </div>
 
           <div className="record__location">
-            <div className={`record__inputs ${errors.finalDestination ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.finalDestination ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${
+                errors.finalDestination ? 'error' : ''
+              }`}
+            >
+              <div
+                className={`record__divInp ${
+                  errors.finalDestination ? 'error' : ''
+                }`}
+              >
                 <LocationOnIcon className="iconloc" />
                 <div className="record__input">
                   <div className="ss">
@@ -254,13 +274,13 @@ const DriverRecordAd = () => {
                           placeholder="From City"
                           // name="finalDestination"
                           isSearchable
-                          noOptionsMessage={() => "no location found"}
+                          noOptionsMessage={() => 'no location found'}
                           styles={customStyles}
                         />
                       )}
                       defaultValue=""
                       rules={{
-                        required: "please select",
+                        required: 'please select',
                       }}
                     />
                   </div>
@@ -273,8 +293,16 @@ const DriverRecordAd = () => {
                 </p>
               )} */}
             </div>
-            <div className={`record__inputs ${errors.initialDestination ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.initialDestination ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${
+                errors.initialDestination ? 'error' : ''
+              }`}
+            >
+              <div
+                className={`record__divInp ${
+                  errors.initialDestination ? 'error' : ''
+                }`}
+              >
                 <LocationOnIcon className="iconloc" />
                 <div className="record__input">
                   <div className="ss">
@@ -288,13 +316,13 @@ const DriverRecordAd = () => {
                           placeholder="To City"
                           // name="finalDestination"
                           isSearchable
-                          noOptionsMessage={() => "no location found"}
+                          noOptionsMessage={() => 'no location found'}
                           styles={customStyles}
                         />
                       )}
                       defaultValue=""
                       rules={{
-                        required: "please select",
+                        required: 'please select',
                       }}
                     />
                   </div>
@@ -307,16 +335,24 @@ const DriverRecordAd = () => {
                 </p>
               )} */}
             </div>
-            <div className={`record__inputs ${errors.initialDestination ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.initialDestination ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${
+                errors.initialDestination ? 'error' : ''
+              }`}
+            >
+              <div
+                className={`record__divInp ${
+                  errors.initialDestination ? 'error' : ''
+                }`}
+              >
                 <LocationOnIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="text"
                     placeholder="From Province"
                     name="fromProvince"
-                    {...register("fromProvince", {
-                      required: "Please fill out the field",
+                    {...register('fromProvince', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -329,16 +365,20 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.toProvince ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.toProvince ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${errors.toProvince ? 'error' : ''}`}
+            >
+              <div
+                className={`record__divInp ${errors.toProvince ? 'error' : ''}`}
+              >
                 <LocationOnIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="text"
                     placeholder="To Province"
                     name="toProvince"
-                    {...register("toProvince", {
-                      required: "Please fill out the field",
+                    {...register('toProvince', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -350,16 +390,20 @@ const DriverRecordAd = () => {
                 </p>
               )} */}
             </div>
-            <div className={`record__inputs ${errors.toProvince ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.toProvince ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${errors.toProvince ? 'error' : ''}`}
+            >
+              <div
+                className={`record__divInp ${errors.toProvince ? 'error' : ''}`}
+              >
                 <LocationOnIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="text"
                     placeholder="From Neigborhood"
                     name="fromNeighborhood"
-                    {...register("fromNeighborhood", {
-                      required: "Please fill out the field",
+                    {...register('fromNeighborhood', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>
@@ -372,16 +416,24 @@ const DriverRecordAd = () => {
               )} */}
             </div>
 
-            <div className={`record__inputs ${errors.toNeighborhood ? "error" : ""}`}>
-              <div className={`record__divInp ${errors.toNeighborhood ? "error" : ""}`}>
+            <div
+              className={`record__inputs ${
+                errors.toNeighborhood ? 'error' : ''
+              }`}
+            >
+              <div
+                className={`record__divInp ${
+                  errors.toNeighborhood ? 'error' : ''
+                }`}
+              >
                 <LocationOnIcon className="iconsize" />
                 <div className="record__input">
                   <input
                     type="text"
                     placeholder="To Neigborhood"
                     name="toNeighborhood"
-                    {...register("toNeighborhood", {
-                      required: "Please fill out the field",
+                    {...register('toNeighborhood', {
+                      required: 'Please fill out the field',
                     })}
                   />
                 </div>

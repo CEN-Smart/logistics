@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import PersonIcon from "@mui/icons-material/Person";
-import CallIcon from "@mui/icons-material/Call";
-import MailIcon from "@mui/icons-material/Mail";
-import LockIcon from "@mui/icons-material/Lock";
-import ErrorIcon from "@mui/icons-material/Error";
-import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import Select from "react-select";
-import { TYPE } from "../../Constants/Constant";
-import axios from "axios";
-import Loading from "../../LoadingOverlay/Loading";
-import "./Register.css";
+import { useState, useContext } from 'react';
+import PersonIcon from '@mui/icons-material/Person';
+import CallIcon from '@mui/icons-material/Call';
+import MailIcon from '@mui/icons-material/Mail';
+import LockIcon from '@mui/icons-material/Lock';
+import ErrorIcon from '@mui/icons-material/Error';
+import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
+import { TYPE } from '../../Constants/Constant';
+import axios from 'axios';
+import Loading from '../../LoadingOverlay/Loading';
+import './Register.css';
+import { AddContext } from '../../Context/AddContext';
 
 // Values for the validation from react-hook-form
 const Register = () => {
@@ -26,26 +27,28 @@ const Register = () => {
   const customStyles = {
     option: (defaultStyles, state) => ({
       ...defaultStyles,
-      color: state.isSelected ? "#212529" : "white",
-      backgroundColor: state.isSelected ? "rgb(255,224,138)" : "#212529",
+      color: state.isSelected ? '#212529' : 'white',
+      backgroundColor: state.isSelected ? 'rgb(255,224,138)' : '#212529',
     }),
-    control: (defaultStyles) => ({
+    control: defaultStyles => ({
       ...defaultStyles,
-      backgroundColor: "#fffff",
-      color: "rgb(219,219,219)",
-      textTransform: "uppercase",
-      padding: "0rem",
-      border: "0rem",
-      boxShadow: "none",
+      backgroundColor: '#fffff',
+      color: 'rgb(219,219,219)',
+      textTransform: 'uppercase',
+      padding: '0rem',
+      border: '0rem',
+      boxShadow: 'none',
     }),
-    singleValue: (defaultStyles) => ({ ...defaultStyles, color: " #14161A" }),
-    input: (provided) => ({
+    singleValue: defaultStyles => ({ ...defaultStyles, color: ' #14161A' }),
+    input: provided => ({
       ...provided,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     }),
   };
   // Navigation Handler
   const navigate = useNavigate();
+
+  const { setUserEmail } = useContext(AddContext);
 
   // loading effect
   const [loading, setLoading] = useState(false);
@@ -54,11 +57,11 @@ const Register = () => {
   const [userExist, setUserExist] = useState(false);
 
   // Submit handler for the registration form
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://migro.onrender.com/api/v1/register",
+        'https://migro.onrender.com/api/v1/register',
         {
           phoneNumber: data.phone,
           email: data.email,
@@ -66,29 +69,33 @@ const Register = () => {
           type: data.TYPE.value,
           firstName: data.firstName,
           lastName: data.lastName,
-          createdDate:'',
+          createdDate: '',
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      console.log(response)
+      console.log('Register ', response);
       const phone = response.data.phoneNumber || data.phone;
-      const email = response.data.email || data.email;
       navigate(`/confirmationPage?phone=${encodeURIComponent(phone)}`);
+      // check if the user already exists
+      setUserEmail(data.email);
+      if (response.status === 409) {
+        setUserExist(true);
+      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setUserExist(true);
       }
-      console.error("Error registering user:", error);
+      console.error('Error registering user:', error);
     } finally {
       setLoading(false);
     }
   };
   const handleSignIn = () => {
-    navigate("/driverform");
+    navigate('/driverform');
   };
   return (
     <div className="driverregister__div">
@@ -112,11 +119,11 @@ const Register = () => {
                         type="name"
                         placeholder="First Name"
                         name="firstName"
-                        {...register("firstName", {
-                          required: "Please fill out the field",
+                        {...register('firstName', {
+                          required: 'Please fill out the field',
                           pattern: {
                             value: /^[a-zA-Z]+$/,
-                            message: "Username must contain only letters.",
+                            message: 'Username must contain only letters.',
                           },
                         })}
                       />
@@ -138,11 +145,11 @@ const Register = () => {
                         type="name"
                         placeholder="last Name"
                         name="lastName"
-                        {...register("lastName", {
-                          required: "Please fill out the field",
+                        {...register('lastName', {
+                          required: 'Please fill out the field',
                           pattern: {
                             value: /^[a-zA-Z]+$/,
-                            message: "Username must contain only letters.",
+                            message: 'Username must contain only letters.',
                           },
                         })}
                       />
@@ -164,12 +171,12 @@ const Register = () => {
                         type="email"
                         placeholder="E-mail"
                         name="email"
-                        {...register("email", {
-                          required: "Please fill out the field",
+                        {...register('email', {
+                          required: 'Please fill out the field',
                           pattern: {
                             value:
                               /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                            message: "Please enter a valid email",
+                            message: 'Please enter a valid email',
                           },
                         })}
                       />
@@ -196,13 +203,13 @@ const Register = () => {
                               options={TYPE}
                               placeholder="Type"
                               isSearchable
-                              noOptionsMessage={() => "no location found"}
+                              noOptionsMessage={() => 'no location found'}
                               styles={customStyles}
                             />
                           )}
                           defaultValue=""
                           rules={{
-                            required: "please select",
+                            required: 'please select',
                           }}
                         />
                       </div>
@@ -225,12 +232,14 @@ const Register = () => {
                         type="tel"
                         placeholder="phone"
                         name="phone"
-                        {...register("phone", {
-                          required: "Please fill out the field",
+                        {...register('phone', {
+                          required: 'Please fill out the field',
 
                           pattern: {
-                            value: /^\+?\d+$/,
-                            message: "Please enter a valid phone number",
+                            // Phone number must start with +234 and must be 13 characters long
+                            value: /^(\+234)[0-9]{10}$/,
+                            message:
+                              'Phone number must start with +234 and must be 13 characters long',
                           },
                         })}
                       />
@@ -252,16 +261,16 @@ const Register = () => {
                         type="password"
                         placeholder="Password"
                         name="passWord"
-                        {...register("passWord", {
-                          required: "Please fill out the field",
+                        {...register('passWord', {
+                          required: 'Please fill out the field',
                           pattern: {
+                            // Password must contain at least one digit, and one special character
                             value:
-                              /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/,
-                            message:
-                              "Password must contain at least one digit, and one special character",
+                              /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+                            message: `Password must contain a number, special character, uppercase and lowercase letter and must be at least 8 characters long`,
                           },
-                          validate: (value) =>
-                            value.toLowerCase() !== "password" ||
+                          validate: value =>
+                            value.toLowerCase() !== 'password' ||
                             "Password cannot be 'password'",
                         })}
                       />
@@ -283,11 +292,11 @@ const Register = () => {
                         type="password"
                         placeholder="Confirm Password"
                         name="confirmPassword"
-                        {...register("confirmPassword", {
-                          required: "Please fill out the field",
-                          validate: (value) => {
-                            if (value !== watch("passWord")) {
-                              return "Your passwords do not match";
+                        {...register('confirmPassword', {
+                          required: 'Please fill out the field',
+                          validate: value => {
+                            if (value !== watch('passWord')) {
+                              return 'Your passwords do not match';
                             }
                           },
                         })}
