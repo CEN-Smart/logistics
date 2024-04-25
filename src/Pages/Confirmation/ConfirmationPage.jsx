@@ -33,7 +33,6 @@ const ConfirmationPage = () => {
   const onSubmit = async values => {
     try {
       setLoading(true);
-      console.log('otp here', values);
       const { data } = await axios.post(
         'https://migro.onrender.com/api/v1/otp/verify-otp',
         { email: userEmail, otp: values.confirm },
@@ -43,7 +42,6 @@ const ConfirmationPage = () => {
           },
         }
       );
-      console.log('data', data);
       navigate('/driverform');
     } catch (error) {
       console.error('Error during OTP verification:', error.message);

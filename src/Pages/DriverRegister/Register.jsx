@@ -56,20 +56,19 @@ const Register = () => {
   // USER ALREADY EXIST
   const [userExist, setUserExist] = useState(false);
 
-  // Submit handler for the registration form
+  // Submit handler for the registration form 'https://migro.onrender.com/api/v1/register'
   const onSubmit = async data => {
     try {
       setLoading(true);
       const response = await axios.post(
         'https://migro.onrender.com/api/v1/register',
         {
-          phoneNumber: data.phone,
-          email: data.email,
-          password: data.passWord,
-          type: data.TYPE.value,
           firstName: data.firstName,
           lastName: data.lastName,
-          createdDate: '',
+          email: data.email,
+          phoneNumber: data.phone,
+          password: data.passWord,
+          type: data.TYPE.value,
         },
         {
           headers: {
@@ -77,14 +76,11 @@ const Register = () => {
           },
         }
       );
-      console.log('Register ', response);
+
       const phone = response.data.phoneNumber || data.phone;
       navigate(`/confirmationPage?phone=${encodeURIComponent(phone)}`);
-      // check if the user already exists
+
       setUserEmail(data.email);
-      if (response.status === 409) {
-        setUserExist(true);
-      }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setUserExist(true);
@@ -236,10 +232,9 @@ const Register = () => {
                           required: 'Please fill out the field',
 
                           pattern: {
-                            // Phone number must start with +234 and must be 13 characters long
-                            value: /^(\+234)[0-9]{10}$/,
-                            message:
-                              'Phone number must start with +234 and must be 13 characters long',
+                            // Phone number must start +966
+                            value: /^(\+9665|05|9665|009665|96605)[0-9]{8}$/,
+                            message: 'Please enter a valid phone number',
                           },
                         })}
                       />
@@ -267,7 +262,7 @@ const Register = () => {
                             // Password must contain at least one digit, and one special character
                             value:
                               /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-                            message: `Password must contain a number, special character, uppercase and lowercase letter and must be at least 8 characters long`,
+                            message: `Invalid password`,
                           },
                           validate: value =>
                             value.toLowerCase() !== 'password' ||
