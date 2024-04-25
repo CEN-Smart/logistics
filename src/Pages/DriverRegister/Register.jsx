@@ -226,14 +226,14 @@ const Register = () => {
                     <div className="record__input">
                       <input
                         type="tel"
-                        placeholder="phone"
+                        placeholder="+966 1234567890"
                         name="phone"
                         {...register('phone', {
                           required: 'Please fill out the field',
 
                           pattern: {
-                            // Phone number must start +966
-                            value: /^(\+9665|05|9665|009665|96605)[0-9]{8}$/,
+                            // Phone number must start with +
+                            value: /^\+[0-9]{1,}$/,
                             message: 'Please enter a valid phone number',
                           },
                         })}
